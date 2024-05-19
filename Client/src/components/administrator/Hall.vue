@@ -1,15 +1,18 @@
 <template>
     <div class="table-box">
+      <a class="add-button" href="/menu-admin">Вернуться</a>
       <div class="table-wrapper">
         <table class="fl-table">
           <thead>
             <tr>
+              <th>Ид</th>
               <th>Зал</th>
               <th>Действие</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="hall in halls" :key="hall.id" @click="openModal(hall)">
+              <td>{{ hall.id }}</td>
               <td>{{ hall.name }}</td>
               <td>
                 <div class="delete-icon" @click="deleteHall(hall.id)">
@@ -32,7 +35,7 @@
           </thead>
           <tbody>
             <tr>
-              <td contenteditable="true" @input="updateHallData('login', $event)">{{ hallData.name }}</td>
+              <td contenteditable="true" @input="updateHallData('name', $event)">{{ hallData.name }}</td>
               <td><button class="add-button" @click="addHall()">Добавить</button></td>
             </tr>
           </tbody>

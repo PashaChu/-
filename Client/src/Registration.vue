@@ -10,7 +10,7 @@
                 <th>Телефон</th>
                 <th>Логин</th>
                 <th>Пароль</th>
-                <th>ИД роли</th>
+                <th hidden>Ид роли</th>
                 <th>Действие</th>
               </tr>
             </thead>
@@ -22,7 +22,10 @@
                 <td contenteditable="true" @input="updateClientData('telephone', $event)">{{ clientData.telephone }}</td>
                 <td contenteditable="true" @input="updateClientData('login', $event)">{{ clientData.login }}</td>
                 <td contenteditable="true" @input="updateClientData('password', $event)">{{ clientData.password }}</td>
-                <td contenteditable="true" @input="updateClientData('role_id', $event)">{{clientData.role_id}}</td>
+                <td hidden><select v-model="clientData.role_id">
+                  <option value="" disabled selected>Выбрать Роль</option>
+                  <option v-for="roleId in roleIds" :key="roleId.id">{{ roleId.id }}</option>
+                </select></td>
                 <td><button class="add-button" @click="addClient()">Добавить</button></td>
               </tr>
             </tbody>
@@ -58,6 +61,7 @@ export default {
         login: '',
         role_id: ''
       },
+      roleId: [],
     }
   },
  computed: {
@@ -72,10 +76,11 @@ export default {
           console.error('Ошибка при получении данных:', error);
         }
       },
-        updateClientsData(field, event) {
-          this.clientsData[field] = event.target.innerText;
+        updateClientData(field, event) {
+          this.clientData[field] = event.target.innerText;
         },
         addClient() {
+          this.clientData.role_id = 2;
           fetch("http://localhost:8080/clients/table", {
             method: "POST",
             headers: {
@@ -88,7 +93,7 @@ export default {
               telephone: this.clientData.telephone,
               login: this.clientData.login,
               password: this.clientData.password,
-              role: this.clientData.role_id
+              role_id: {id: this.clientData.role_id}
             })
           })
             .then(response => response.json())
