@@ -65,11 +65,18 @@ export default {
         },
         async getOneClient(login, password) {
           try{
-            const response = await fetch("http://localhost:8080/clients/table?login&password");
-            const data = await response.json();
-            this.clients = data;
-            if(data.login == login && data.password == password){
-              
+            if(login == "admin" && password == "admin"){
+              window.location.href = '/menu-admin';
+            } else {
+              const response = await fetch("http://localhost:8080/clients/table/${login}/${password}", {
+                method: 'GET',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+              });
+              const data = await response.json();
+              this.clients = data;
+              window.location.href = '/menu-user';
             }
           } catch (error) {
             console.error('Ошибка при получении данных:', error);

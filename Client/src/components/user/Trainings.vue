@@ -1,69 +1,29 @@
 <template>
     <div class="table-box">
-      <a class="add-button" href="/menu-admin">Вернуться</a>
+      <a class="add-button" href="/menu-user">Вернуться</a>
       <div class="table-wrapper">
         <table class="fl-table">
           <thead>
             <tr>
+              <th>Ид</th>
               <th>Вид тренировки</th>
-              <th>Действие</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="training in trainings" :key="training.id" @click="openModal(training)">
+              <td>{{ training.id }}</td>
               <td>{{ training.title }}</td>
-              <td>
-                <div class="delete-icon" @click="deleteTraining(training.id)">
-                  &#10006;
-                </div>
-              </td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
-    <div class="table-box-under">
-      <div class="table-wrapper">
-        <table class="fl-table">
-          <thead>
-            <tr>
-              <th>Вид тренировки</th>
-              <th>Действие</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td contenteditable="true" @input="updateTrainingData('title', $event)">{{ trainingData.title }}</td>
-              <td><button class="add-button" @click="addTraining()">Добавить</button></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-    <div v-if="selectedTraining" class="modal">
-      <div class="modal-content">
-          <div class="modal-header">
-            <h2>Update</h2>
-            <span class="close-modal" @click="closeModal">&times;</span>
-          </div>
-          <div class="modal-inner">
-            <div class="modal-input">
-              <label for="editedId" class="blocked-label">ID:</label>
-              <input type="text" id="editedId" v-model="editedTraining.id" disabled />
-            </div>
-            <div class="modal-input">
-              <label for="editedLogin">Login:</label>
-              <input type="text" id="editedLogin" v-model="editedTraining.login" />
-            </div>
-          </div>
-          <button class="button-40" @click="updateTraining">Обновить</button>
-        </div>
-      </div>
+    
   </template>
 
   <script>
 export default {
-  name: 'training-table',
+  name: 'training',
   components: {
     },
   data() {
@@ -92,42 +52,11 @@ export default {
           console.error('Ошибка при получении данных:', error);
         }
       },
-        async deleteTraining(trainingrId) {
-          event.stopPropagation();
-          try {
-            await fetch(`http://localhost:8080/training/table/${trainingId}`, {
-              method: 'DELETE',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-            });
-            this.getTrainings();
-          } catch (error) {
-            console.error('Ошибка при удалении пользователя:', error);
-          }
-        },
+        
         updateTrainingData(field, event) {
           this.trainingData[field] = event.target.innerText;
         },
-        addTraining() {
-          fetch("http://localhost:8080/training/table", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-              title: this.trainingData.title
-            })
-          })
-            .then(response => response.json())
-            .then(data => {
-              this.getTrainings();
-              console.log(data);
-            })
-            .catch(error => {
-              console.error(error);
-            });
-        },
+        
 
         openModal(training) {
           this.selectedTraining = training;
@@ -136,26 +65,7 @@ export default {
         closeModal() {
           this.selectedTraining = null;
         },
-        async updateTraining() {
-          try {
-            const response = await fetch('http://localhost:8080/training/table', {
-              method: 'PATCH',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify(this.editedTraining),
-            });
-
-            if (response.ok) {
-              this.getTrainings();
-              this.closeModal();
-            } else {
-              console.error('Ошибка при обновлении пользователя');
-            }
-          } catch (error) {
-            console.error('Ошибка сети:', error);
-          }
-        },
+        
     },
  mounted(){
       this.getTrainings();

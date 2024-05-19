@@ -1,5 +1,6 @@
 <template>
     <div class="table-box">
+      <a class="add-button" href="/menu-admin">Вернуться</a>
       <div class="table-wrapper">
         <table class="fl-table">
           <thead>
@@ -31,6 +32,12 @@ export default {
   data() {
     return {
       clients: [],
+      clientData: {
+        name: "",
+        patronymic: "",
+        surname: "",
+        telephone: "",
+      },
       selectedClient: null,
       editedClient: {
         name: "",

@@ -1,5 +1,6 @@
 <template>
     <div class="table-box">
+      <a class="add-button" href="/menu-admin">Вернуться</a>
       <div class="table-wrapper">
         <table class="fl-table">
           <thead>
@@ -14,7 +15,6 @@
           </thead>
           <tbody>
             <tr v-for="record in records" :key="record.id" @click="openModal(record)">
-              <td>{{ record.id }}</td>
               <td>{{ record.client }}</td>
               <td>{{ record.coach }}</td>
               <td>{{ record.hall }}</td>
@@ -45,10 +45,22 @@
           </thead>
           <tbody>
             <tr>
-              <td contenteditable="true" @input="updateRecordData('client', $event)">{{ recordData.client }}</td>
-              <td contenteditable="true" @input="updateRecordData('coach', $event)">{{ recordData.coach }}</td>
-              <td contenteditable="true" @input="updateRecordData('hall', $event)">{{ recordData.hall }}</td>
-              <td contenteditable="true" @input="updateRecordData('training', $event)">{{ recordData.training }}</td>
+              <td><select v-model="recordData.client">
+                <option value="" disabled selected>Выбрать Ид клиента</option>
+                <option v-for="clientId in clientIds" :key="clientId.id">{{ client.surname }}</option>
+              </select></td>
+              <td><select v-model="recordData.coach">
+                <option value="" disabled selected>Выбрать Тренера</option>
+                <option v-for="coachId in coachIds" :key="coachId.id">{{ coach.surname }}</option>
+              </select></td>
+              <td><select v-model="recordData.hall">
+                <option value="" disabled selected>Выбрать Зал</option>
+                <option v-for="hallId in hallIds" :key="hallId.id">{{ hall.name }}</option>
+              </select></td>
+              <td><select v-model="recordData.training">
+                <option value="" disabled selected>Выбрать Тренера</option>
+                <option v-for="trainingId in trainingIds" :key="trainingId.id">{{ training.title }}</option>
+              </select></td>
               <td contenteditable="true" @input="updateRecordData('date', $event)">{{ recordData.date }}</td>
               <td><button class="add-button" @click="addRecord()">Добавить</button></td>
             </tr>
@@ -90,14 +102,21 @@ export default {
         client: "",
         coach: "",
         hall: "",
-        training: ""
+        training: "",
       },
       selectedRecord: null,
       editedRecord: {
         id: '',
-        date: ''
+        date: '',
+        client: "",
+        coach: "",
+        hall: "",
+        training: "",
       },
-
+      clientIds: [],
+      coachIds: [],
+      hallIds: [],
+      trainingIds: [],
     }
   },
  computed: {

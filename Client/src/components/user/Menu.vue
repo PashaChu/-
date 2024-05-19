@@ -9,7 +9,8 @@
       <li><a href="/">Главная страница</a></li>
       <li><a href="/registration">Зарегистрироваться</a></li>
       <li><a href="/autorize">Авторизоваться</a></li>
-      <li><a href="/menu">Данные</a></li>
+      <li><a href="/menu-user">.</a></li>
+      <li><a href="/menu-admin">!</a></li>
     </ul>
     <label for="menu-btn" class="btn menu-btn"><i class="fas fa-bars"></i></label>
   </div>

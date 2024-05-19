@@ -1,5 +1,6 @@
 <template>
     <div class="table-box">
+      <a class="add-button" href="/menu-admin">Вернуться</a>
       <div class="table-wrapper">
         <table class="fl-table">
           <thead>
@@ -12,7 +13,6 @@
           </thead>
           <tbody>
             <tr v-for="coach in coaches" :key="coach.id" @click="openModal(coach)">
-              <td>{{ coach.id }}</td>
               <td>{{ coach.surname }}</td>
               <td>{{ coach.name }}</td>
               <td>{{ coach.patronymic }}</td>
@@ -39,42 +39,16 @@
           </thead>
           <tbody>
             <tr>
-              <td contenteditable="true" @input="updateCoachData('login', $event)">{{ coachData.surname }}</td>
-              <td contenteditable="true" @input="updateCoachData('password', $event)">{{ coachData.name }}</td>
-              <td contenteditable="true" @input="updateCoachData('country', $event)">{{ coachData.patronymic }}</td>
+              <td contenteditable="true" @input="updateCoachData('surname', $event)">{{ coachData.surname }}</td>
+              <td contenteditable="true" @input="updateCoachData('name', $event)">{{ coachData.name }}</td>
+              <td contenteditable="true" @input="updateCoachData('patronymic', $event)">{{ coachData.patronymic }}</td>
               <td><button class="add-button" @click="addCoach()">Добавить</button></td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
-    <div v-if="selectedCoach" class="modal">
-      <div class="modal-content">
-          <div class="modal-header">
-            <h2>Update</h2>
-            <span class="close-modal" @click="closeModal">&times;</span>
-          </div>
-          <div class="modal-inner">
-            <div class="modal-input">
-              <label for="editedId" class="blocked-label">ID:</label>
-              <input type="text" id="editedId" v-model="editedCoach.id" disabled />
-            </div>
-            <div class="modal-input">
-              <label for="editedLogin">Surname:</label>
-              <input type="text" id="editedLogin" v-model="editedCoach.surname" />
-            </div>
-            <div class="modal-input">
-              <label for="editedCountry">Name:</label>
-              <input type="text" id="editedCountry" v-model="editedCoach.name" />
-            </div>
-            <div class="modal-input">
-              <label for="editedSex">Patronymic:</label>
-              <input type="text" id="editedSex" v-model="editedCoach.patronymic" />
-            </div>
-          </div>
-          <button class="button-40" @click="updateCoach">Обновить</button>
-        </div>
-      </div>
+    
   </template>
 
   <script>
@@ -136,9 +110,9 @@ export default {
               "Content-Type": "application/json"
             },
             body: JSON.stringify({
-              text: this.coachData.surname,
-              text: this.coachData.name,
-              text: this.coachData.patronymic
+              surname: this.coachData.surname,
+              name: this.coachData.name,
+              patronymic: this.coachData.patronymic
             })
           })
             .then(response => response.json())
@@ -158,26 +132,7 @@ export default {
         closeModal() {
           this.selectedCoach = null;
         },
-        async updateCoach() {
-          try {
-            const response = await fetch('http://localhost:8080/coaches/table', {
-              method: 'PATCH',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify(this.editedCoach),
-            });
-
-            if (response.ok) {
-              this.getCoaches();
-              this.closeModal();
-            } else {
-              console.error('Ошибка при обновлении пользователя');
-            }
-          } catch (error) {
-            console.error('Ошибка сети:', error);
-          }
-        },
+        
     },
  mounted(){
       this.getCoaches();
